@@ -30,10 +30,9 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-}
 
 @Composable
-fun Greeting() {
+fun Greeting(modifier: Modifier = Modifier) {
     val Game = game_source.dummygame[0]
 
     Column(modifier = Modifier.fillMaxSize().padding(all = 30.dp)) {
