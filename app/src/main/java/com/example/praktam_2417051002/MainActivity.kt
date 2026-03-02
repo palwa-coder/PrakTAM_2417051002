@@ -36,7 +36,7 @@ fun Greeting(modifier: Modifier = Modifier) {
     val Game = game_source.dummygame[0]
 
     Column(modifier = Modifier.fillMaxSize().padding(all = 30.dp)) {
-        Text(text = "Nama: ${Game.nama}")
+        Text(text = "Location: ${Game.nama}")
         Text(text = "Chat: ${Game.chat}")
         Text(text = "Choices: ${Game.choices}")
     }
