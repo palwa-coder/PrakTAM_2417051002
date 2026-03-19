@@ -8,9 +8,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -59,33 +61,7 @@ fun ChatGameScreen() {
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            Row(
-                verticalAlignment = Alignment.Top
-            ) {
-
-                Image(
-                    painter = painterResource(id = game.imageRes),
-                    contentDescription = game.name,
-                    modifier = Modifier.size(70.dp)
-                )
-
-                Spacer(modifier = Modifier.width(12.dp))
-
-                Column(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(Color.White)
-                        .padding(12.dp)
-                ) {
-
-                    Text(
-                        text = game.name,
-                        fontWeight = FontWeight.Bold
-                    )
-
-                    Text(text = game.chat)
-                }
-            }
+            ChatItem(game)
         }
 
         Column {
@@ -105,6 +81,54 @@ fun ChatGameScreen() {
             ) {
                 Text(text = "Another choice")
             }
+        }
+    }
+}
+
+@Composable
+fun ChatItem(game: Game) {
+
+    var isFavorite by remember { mutableStateOf(false) }
+
+    Row(
+        verticalAlignment = Alignment.Top
+    ) {
+
+        Box {
+
+            Image(
+                painter = painterResource(id = game.imageRes),
+                contentDescription = game.name,
+                modifier = Modifier.size(70.dp)
+            )
+
+            IconButton(
+                onClick = { isFavorite = !isFavorite },
+                modifier = Modifier.align(Alignment.TopEnd)
+            ) {
+                Icon(
+                    imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                    contentDescription = "Favorite",
+                    tint = if (isFavorite) Color.Red else Color.White
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.width(12.dp))
+
+        Column(
+            modifier = Modifier
+                .clip(RoundedCornerShape(12.dp))
+                .background(Color.White)
+                .padding(12.dp)
+        ) {
+
+            Text(
+                text = game.name,
+                fontWeight = FontWeight.Bold
+            )
+
+            Text(text = game.chat)
         }
     }
 }
