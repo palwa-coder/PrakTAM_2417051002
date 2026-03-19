@@ -41,6 +41,7 @@ class MainActivity : ComponentActivity() {
 fun ChatGameScreen() {
 
     val game = game_source.dummygame[0]
+    var isFavorite by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -51,17 +52,57 @@ fun ChatGameScreen() {
 
         Column {
 
-            Image(
-                painter = painterResource(id = R.drawable.room),
-                contentDescription = "room",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(180.dp)
-            )
+            Box {
+
+                Image(
+                    painter = painterResource(id = R.drawable.room),
+                    contentDescription = "room",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(180.dp)
+                )
+
+                IconButton(
+                    onClick = { isFavorite = !isFavorite },
+                    modifier = Modifier.align(Alignment.TopEnd)
+                ) {
+                    Icon(
+                        imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                        contentDescription = "Favorite",
+                        tint = if (isFavorite) Color.Red else Color.White
+                    )
+                }
+            }
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            ChatItem(game)
+            Row(
+                verticalAlignment = Alignment.Top
+            ) {
+
+                Image(
+                    painter = painterResource(id = game.imageRes),
+                    contentDescription = game.name,
+                    modifier = Modifier.size(70.dp)
+                )
+
+                Spacer(modifier = Modifier.width(12.dp))
+
+                Column(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(Color.White)
+                        .padding(12.dp)
+                ) {
+
+                    Text(
+                        text = game.name,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    Text(text = game.chat)
+                }
+            }
         }
 
         Column {
@@ -81,54 +122,6 @@ fun ChatGameScreen() {
             ) {
                 Text(text = "Another choice")
             }
-        }
-    }
-}
-
-@Composable
-fun ChatItem(game: Game) {
-
-    var isFavorite by remember { mutableStateOf(false) }
-
-    Row(
-        verticalAlignment = Alignment.Top
-    ) {
-
-        Box {
-
-            Image(
-                painter = painterResource(id = game.imageRes),
-                contentDescription = game.name,
-                modifier = Modifier.size(70.dp)
-            )
-
-            IconButton(
-                onClick = { isFavorite = !isFavorite },
-                modifier = Modifier.align(Alignment.TopEnd)
-            ) {
-                Icon(
-                    imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
-                    contentDescription = "Favorite",
-                    tint = if (isFavorite) Color.Red else Color.White
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.width(12.dp))
-
-        Column(
-            modifier = Modifier
-                .clip(RoundedCornerShape(12.dp))
-                .background(Color.White)
-                .padding(12.dp)
-        ) {
-
-            Text(
-                text = game.name,
-                fontWeight = FontWeight.Bold
-            )
-
-            Text(text = game.chat)
         }
     }
 }
