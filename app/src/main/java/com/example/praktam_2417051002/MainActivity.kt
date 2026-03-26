@@ -5,8 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
@@ -15,7 +17,6 @@ import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -40,16 +41,80 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun ChatGameScreen() {
 
-    val game = game_source.dummygame[0]
-    var isFavorite by remember { mutableStateOf(false) }
-
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(20.dp),
-        verticalArrangement = Arrangement.SpaceBetween
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
 
+        item {
+            Text(
+                text = "Rekomendasi Game",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                items(game_source.dummygame) { game ->
+                    GameRowItem(game)
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                text = "Semua Game",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold
+            )
+        }
+
+        items(game_source.dummygame) { game ->
+            GameItem(game)
+        }
+    }
+}
+
+@Composable
+fun GameRowItem(game: Game) {
+    Card(
+        modifier = Modifier.width(140.dp),
+        shape = RoundedCornerShape(12.dp)
+    ) {
+        Column {
+            Image(
+                painter = painterResource(id = game.imageRes),
+                contentDescription = game.name,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(100.dp)
+            )
+
+            Column(modifier = Modifier.padding(8.dp)) {
+                Text(
+                    text = game.name,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(text = game.chat)
+            }
+        }
+    }
+}
+
+@Composable
+fun GameItem(game: Game) {
+
+    var isFavorite by remember { mutableStateOf(false) }
+
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp)
+    ) {
         Column {
 
             Box {
@@ -64,20 +129,23 @@ fun ChatGameScreen() {
 
                 IconButton(
                     onClick = { isFavorite = !isFavorite },
-                    modifier = Modifier.align(Alignment.TopEnd)
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(8.dp)
                 ) {
                     Icon(
-                        imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                        imageVector = if (isFavorite) Icons.Filled.Favorite
+                        else Icons.Outlined.FavoriteBorder,
                         contentDescription = "Favorite",
                         tint = if (isFavorite) Color.Red else Color.White
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
             Row(
-                verticalAlignment = Alignment.Top
+                modifier = Modifier.padding(12.dp)
             ) {
 
                 Image(
@@ -88,39 +156,34 @@ fun ChatGameScreen() {
 
                 Spacer(modifier = Modifier.width(12.dp))
 
-                Column(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(Color.White)
-                        .padding(12.dp)
-                ) {
-
+                Column {
                     Text(
                         text = game.name,
                         fontWeight = FontWeight.Bold
                     )
-
                     Text(text = game.chat)
                 }
             }
-        }
 
-        Column {
+            Spacer(modifier = Modifier.height(12.dp))
 
-            Button(
-                onClick = { },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(text = game.choice)
-            }
+            Column(modifier = Modifier.padding(12.dp)) {
 
-            Spacer(modifier = Modifier.height(10.dp))
+                Button(
+                    onClick = { },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(text = game.choice)
+                }
 
-            Button(
-                onClick = { },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(text = "Another choice")
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Button(
+                    onClick = { },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(text = "Another choice")
+                }
             }
         }
     }
