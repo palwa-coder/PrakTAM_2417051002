@@ -17,10 +17,7 @@ import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.praktam_2417051002.ui.theme.PrakTAM_2417051002Theme
 import model.Game
@@ -51,8 +48,7 @@ fun ChatGameScreen() {
         item {
             Text(
                 text = "Rekomendasi Game",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold
+                style = MaterialTheme.typography.titleLarge
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -69,8 +65,7 @@ fun ChatGameScreen() {
 
             Text(
                 text = "Semua Game",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold
+                style = MaterialTheme.typography.titleLarge
             )
         }
 
@@ -84,7 +79,10 @@ fun ChatGameScreen() {
 fun GameRowItem(game: Game) {
     Card(
         modifier = Modifier.width(140.dp),
-        shape = RoundedCornerShape(12.dp)
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        )
     ) {
         Column {
             Image(
@@ -98,9 +96,12 @@ fun GameRowItem(game: Game) {
             Column(modifier = Modifier.padding(8.dp)) {
                 Text(
                     text = game.name,
-                    fontWeight = FontWeight.Bold
+                    style = MaterialTheme.typography.titleMedium
                 )
-                Text(text = game.chat)
+                Text(
+                    text = game.chat,
+                    style = MaterialTheme.typography.bodySmall
+                )
             }
         }
     }
@@ -113,7 +114,10 @@ fun GameItem(game: Game) {
 
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp)
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        )
     ) {
         Column {
 
@@ -134,10 +138,15 @@ fun GameItem(game: Game) {
                         .padding(8.dp)
                 ) {
                     Icon(
-                        imageVector = if (isFavorite) Icons.Filled.Favorite
-                        else Icons.Outlined.FavoriteBorder,
+                        imageVector = if (isFavorite)
+                            Icons.Filled.Favorite
+                        else
+                            Icons.Outlined.FavoriteBorder,
                         contentDescription = "Favorite",
-                        tint = if (isFavorite) Color.Red else Color.White
+                        tint = if (isFavorite)
+                            MaterialTheme.colorScheme.primary
+                        else
+                            MaterialTheme.colorScheme.onPrimary
                     )
                 }
             }
@@ -159,9 +168,12 @@ fun GameItem(game: Game) {
                 Column {
                     Text(
                         text = game.name,
-                        fontWeight = FontWeight.Bold
+                        style = MaterialTheme.typography.titleMedium
                     )
-                    Text(text = game.chat)
+                    Text(
+                        text = game.chat,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
                 }
             }
 
@@ -171,28 +183,32 @@ fun GameItem(game: Game) {
 
                 Button(
                     onClick = { },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary
+                    )
                 ) {
-                    Text(text = game.choice)
+                    Text(
+                        text = game.choice,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Button(
                     onClick = { },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.secondary
+                    )
                 ) {
-                    Text(text = "Another choice")
+                    Text(
+                        text = "Another choice",
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
                 }
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ChatGamePreview() {
-    PrakTAM_2417051002Theme {
-        ChatGameScreen()
     }
 }
