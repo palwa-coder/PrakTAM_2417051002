@@ -11,18 +11,16 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.runtime.*
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.example.praktam_2417051002.ui.theme.PrakTAM_2417051002Theme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -85,12 +83,10 @@ fun ChatGameScreen() {
 fun GameRowItem(game: Game) {
     Card(
         modifier = Modifier.width(140.dp),
-        shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        )
+        shape = RoundedCornerShape(12.dp)
     ) {
         Column {
+
             Image(
                 painter = painterResource(id = game.imageRes),
                 contentDescription = game.name,
@@ -100,14 +96,8 @@ fun GameRowItem(game: Game) {
             )
 
             Column(modifier = Modifier.padding(8.dp)) {
-                Text(
-                    text = game.name,
-                    style = MaterialTheme.typography.titleMedium
-                )
-                Text(
-                    text = game.chat,
-                    style = MaterialTheme.typography.bodySmall
-                )
+                Text(text = game.name)
+                Text(text = game.chat)
             }
         }
     }
@@ -117,8 +107,8 @@ fun GameRowItem(game: Game) {
 fun GameItem(game: Game) {
 
     var isFavorite by remember { mutableStateOf(false) }
-
     var isLoading by remember { mutableStateOf(false) }
+
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -126,21 +116,21 @@ fun GameItem(game: Game) {
 
         Card(
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surface
-            )
+            shape = RoundedCornerShape(16.dp)
         ) {
             Column {
 
                 Box {
 
-                    Image(
-                        painter = painterResource(id = R.drawable.room),
+                    AsyncImage(
+                        model = game.backgroundUrl,
                         contentDescription = "room",
+                        placeholder = painterResource(id = game.imageRes), // Tampil saat loading
+                        error = painterResource(id = game.imageRes), // Tampil jika URL gagal dimuat
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(180.dp)
+                            .height(180.dp),
+                        contentScale = ContentScale.Crop
                     )
 
                     IconButton(
@@ -154,20 +144,14 @@ fun GameItem(game: Game) {
                                 Icons.Filled.Favorite
                             else
                                 Icons.Outlined.FavoriteBorder,
-                            contentDescription = "Favorite",
-                            tint = if (isFavorite)
-                                MaterialTheme.colorScheme.primary
-                            else
-                                MaterialTheme.colorScheme.onPrimary
+                            contentDescription = "Favorite"
                         )
                     }
                 }
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                Row(
-                    modifier = Modifier.padding(12.dp)
-                ) {
+                Row(modifier = Modifier.padding(12.dp)) {
 
                     Image(
                         painter = painterResource(id = game.imageRes),
@@ -178,14 +162,8 @@ fun GameItem(game: Game) {
                     Spacer(modifier = Modifier.width(12.dp))
 
                     Column {
-                        Text(
-                            text = game.name,
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                        Text(
-                            text = game.chat,
-                            style = MaterialTheme.typography.bodyMedium
-                        )
+                        Text(text = game.name)
+                        Text(text = game.chat)
                     }
                 }
 
@@ -205,23 +183,15 @@ fun GameItem(game: Game) {
                             }
                         },
                         modifier = Modifier.fillMaxWidth(),
-                        enabled = !isLoading,
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.primary
-                        )
+                        enabled = !isLoading
                     ) {
                         if (isLoading) {
                             CircularProgressIndicator(
                                 modifier = Modifier.size(20.dp),
                                 strokeWidth = 2.dp
                             )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text("Memproses...")
                         } else {
-                            Text(
-                                text = game.choice,
-                                color = MaterialTheme.colorScheme.onPrimary
-                            )
+                            Text(text = game.choice)
                         }
                     }
 
@@ -229,15 +199,9 @@ fun GameItem(game: Game) {
 
                     Button(
                         onClick = { },
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.secondary
-                        )
+                        modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text(
-                            text = "Another choice",
-                            color = MaterialTheme.colorScheme.onPrimary
-                        )
+                        Text("Another choice")
                     }
                 }
             }
